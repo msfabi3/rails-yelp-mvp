@@ -5,3 +5,32 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+puts 'Cleaning database...'
+Restaurant.destroy_all
+
+puts 'Creating restaurants...'
+
+10.times do
+  restaurants_attributes =
+    {
+      name:         Faker::Movies::HitchhikersGuideToTheGalaxy.planet,
+      address:      Faker::Address.street_address,
+      phone_number: Faker::PhoneNumber.phone_number,
+      category: ["chinese", "italian", "japanese", "french", "belgian"].sample
+    }
+
+
+  restaurant = Restaurant.create!(restaurants_attributes)
+
+  reviews_attributes =
+    {
+      content:       Faker::Games::Pokemon.move,
+      rating:        (0..5).to_a.sample
+    }
+
+
+  review = Review.new(reviews_attributes)
+  review.restaurant = restaurant
+  review.save
+end
+puts 'Finished!'
